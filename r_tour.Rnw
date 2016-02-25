@@ -1,0 +1,317 @@
+\documentclass[draft]{article}
+
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+ 
+\setlength{\parindent}{2em}
+\setlength{\parskip}{1em}
+
+\graphicspath{ {images/} }
+
+
+\title{Quick Tour of R and R Studio}
+\date{February 12, 2106}
+\author{Robert Olendorf}
+
+\begin{document}
+  \maketitle
+  
+  \pagenumbering{gobble}
+  \newpage
+  
+  \section*{R Studio}
+  
+
+  
+  R Studio is an Integrated Development Environment (IDE) for the R Statistical Package. You can run R 
+  fine from the command line and using text editors such as Notepad++ or Textmate, but it provides a 
+  nice comprehensive view of your current project. It's also probably easier for beginners to learn on.
+  
+  \begin{figure}[t]
+    \includegraphics[scale=0.25]{rstudio_screenshot}
+    \caption{Screen shot from the typical default layout.}
+    \label{fig:screenshot}
+    \centering
+  \end{figure}
+  
+ When you open R Studio you should get something like the screenshot shown in figure \ref{fig:screenshot}. \textbf{Section A} is where your scripts and other documents are displayed. \textbf{Section B} is the \textbf{\textit{Console}}, where you do your interactive programming. \textbf{Section C} contains several tabs. It will usually contain at least your \textbf{\textit{Environment}}, a listing of all your objects (ie. variables, data) and a \textbf{\textit{History}} tab for your \textbf{\textit{Console}} input. \textbf{Section D} contains a number of tabs. Minimally it will contain a \textbf{\textit{Files}} tab, a \textbf{\textit{Plots}} tab, a \textbf{\textit{Packages}} tab, and a \textbf{\textit{Help}} tab. The \textbf{\textit{Files}} tab allows you to easily navigate the directory structure of your project. The \textbf{\textit{Plots}} tab displays previews of plots you generate. The \textbf{\textit{Packages}} tab lets you easily manage your R packages. The \textbf{\textit{Help}} tab displays the help.
+ 
+
+\subsection*{Setting Up}
+ Our first task is to define a default working direcotry. This is where R will start when you are not working on a project. Opening and saving files will be relative to this directory. Create a directory in your \textit{Documents} called \textit{rprojects}. You can of course choose your own location. Choose \textbf{[Preferences]} from the \textbf{[RStudio]} menu. Our first step will be to define a default working directory. This is where R will start, and save files if you are not working on a project. Choose \textbf{[Preferences]} the \textbf{[RStudio]} menu and choose the \textbf{[General]} tab. The top options edit or browse to set the default working directory to \textit{rprojects}.
+ 
+ 
+ Next choose the \textbf{[Code]} tab. Check \textbf{Insert spaces for tab} and set it to 2. I also like to have \textbf{Insert matching parens/quotes} turned on. 
+ 
+ Got the \textbf{[Appearance]} tab and choose an \textit{Editor Theme}. I like \textit{Solarized Dark} or \textit{Monokai} but just make sure its one that works well for you. 
+ 
+ Unless you have a reason to change it, leave the \textbf{Pane Layout} at the defaults. It will work better with this and other tutorials.
+ 
+ Leave the \textbf{Packages} as the default values.
+ 
+ In the \textbf{Sweave} tab set \textit{Weave Rnw files usign: } to \textbf{\textit{Knitr}}. \textit{Typeset LaTeX into PDF using: \textbf{pdfLaTeX}}. Make sure \textit{Clean auxilliary output after compile} and \textit{Insert numbered sections and subsections} are checked. \textit{\ldots} using \textbf{\textit{RStudio Viewer}}. 
+ 
+ Leave the \textbf{Spelling} tab at the defaults.
+ 
+ I usually do my Git commands on a separate terminal window. However, sometimes you need to use the RStudio Git integration. To set this up in the \textbf{Git/SVN} make sure the Git executable is set up. This may vary with operating system. Also create an SSH key if you haven't already, or add the path to it if you have one.
+ 
+ Make sure \textit{Enable publishing apps and documents} is checked in the \textbf{Publishing} tab.
+
+ 
+  \section*{R Basics}
+  
+  \subsection*{Command Line}
+    R is a command line tool. This gives many people stress, but don't let it stress you. First learn the syntax. Then learn the commands you use most often. Also, don't hesitate to Google something. I often do, especially when its something I don't do a lot. Don't waste time fiddling. 
+    First off, lets do something easy. Lets do some math.
+    
+    <<command-line-1>>=
+    1 + 1  # R will just print the answer
+    
+    # However, we rarely want to do this. Lets set it to a variable.
+    a <- 1 + 1  # a is the variable, we use the less than and dash 
+                # rather than equals
+    a # Notice the value isn't displayed until we enter the variable
+      # again
+    b = 1 + 1 # Equals still works, but its not preferred. 
+    @
+    
+    Variables can and function names may consist of letters, numbers, dots and underlines. They must start with a letter or a dot not followed by a number. Starting with a dot is valid, but not good style.
+    
+    <<names, eval=FALSE>>=
+    a <- 1  # valid
+    b.1 <- 2 # valid
+    b1 <- 3 # valid
+    b_1 <- 4 # valid 
+    .b <- # valid
+    1b <- 5 # invalid
+    .1 <- # invalid
+    @
+    
+    Rists tend to use the dot as a namespacing convention. However, there is no true significance to the dot in the name. R treats it as just another character.
+    
+    Now look in your \textbf{Environment} tab. You will see the \textbf{\textit{a}} and \textbf{\textit{b}} variables in there. Choose the \textbf{History} tab. You will see both commands recorded. Its good to get in the habit of building a script of your work. So lets do that. Do \textbf{[File/New File/R Script]}. Now select those two lines(Shift Select) and click \textbf{To Source}. It should be in your script now. This is a good way to build up scripts. Play around in the console to get it working, then copy the command(s) to a script. You may have to tweak the script still, but its an efficient way to go.
+    
+  \subsection*{Datatypes}
+    
+    Lets get some basics out of the way before we start building documents. We need to understand R Datatypes, Functions and learn some of the most basic functions first.
+    
+    \subsubsection*{Scalars}
+    R comes with the typical scalar datatypes shown below.
+    
+    <<scalars>>=
+      5 # an integer (numeric)
+      5.5 # float (numeric)
+      "a" #character
+      "a string"  # a string (a vector of characters)
+      FALSE # logical
+    @
+    
+    \subsubsection*{Vectors}
+    <<vectors>>=
+      num.vec <- c(1, 2, 4, 5)  # creating a vector the hard way
+      num.vec
+      num.vec2 <- 1:5 # automating a vector creation
+      num.vec2
+      num.vec3 <- seq(1, 5, 0.5)
+      num.vec3
+      alpha.vec <- c("a", "b", "c", "d")  # a vector of charaters
+      alpha.vec
+      # a vector of logicals
+      logical.vec <- c(TRUE, FALSE, TRUE, TRUE, FALSE)  
+      logical.vec
+       
+      ##
+      # A vector must be of the same type. 
+       # The integer gets converted to a character
+      test.vec <- c("1", "2", 3) 
+      test.vec
+    @
+    
+    You can access parts of vectors using the following methods.
+    
+    <<vector-access>>=
+      v <- seq(1, 20, 2)
+      v
+      # Get 1 item. Notice the index starts with 1 rather than
+      # 0 as in other languages.
+      v[1]  
+      
+      v[2:5]  # Get a slice
+      
+      v[c(1, 5, 9)]  # Get specific indices
+    @
+    
+    \subsubsection*{Matrixes}
+    Matrices are two dimensional vectors. Columns (but not row) in a matrix must have the same datatype (numeric, character, etc.).
+    
+    <<matrices>>=
+      # Create a 5 x 4 matrix. R fills by column.
+      matrix.1 <- matrix(1:20, nrow=5, ncol=4)
+      matrix.1
+      
+      # You can fill by rows too
+      
+      matrix.row <- matrix(1:20, nrow = 5, ncol=4, byrow = TRUE)
+      matrix.row
+      
+      # If you don't fill the matrix R repeats
+      # the sequence until its filled. It doesn't
+      # have to be an even fill, but you will get a warning.
+      matrix.2 <- matrix(1:7, nrow=5, ncol=4)
+      matrix.2
+    @
+    
+    Accessing a matrix is as follows.
+    
+    <<matrx-access>>=
+      matrix.1[,3]  # 4th column
+      matrix.1[2,]  # 2nd row
+      matrix.1[2:4, 1:3] # rows 2, 3 ,4 of columuns 1, 2, 3
+    @
+    
+    \subsubsection*{Lists}
+    
+    Lists are an ordered collection of objects. They don't have to be the same type.
+    
+    <<lists>>=
+      # A list with a string, numeric, logical and a vector
+      # using a variable to insert the vector.
+      list.1 <- list("Fred", 24, FALSE, num.vec)  
+      list.1
+      
+      # Named list components
+      list.2 <- list(name="Sue", age=32, smoker=TRUE, data=num.vec2)
+      list.2 
+      
+      # We can make a vector of lists
+      
+      list.vect <- c(list.1, list.2)
+      list.vect
+    @
+    
+    We can access parts of a list like this.
+    
+    <<list-access>>=
+      # Notice the double bracket.
+      list.2[[2]]  # the second entry
+      
+      
+      list.2[["name"]]
+    @
+    
+    \subsubsection*{Data Frames}
+    Data frames are something fairly unique to R. It is usually what  you will
+    use to contain tabuluar data. They are a bit like matrices, but each column 
+    can have a different datatype. 
+    
+    <<data-frames>>=
+      a <- c(1:4)
+      b <- c("George", "Tom", "Phineas", "Ferb")
+      c <- c(TRUE, FALSE, FALSE, TRUE)
+      
+      df.1 <- data.frame(a, b, c)
+      df.1
+      
+      # We can name the columsn as well.
+      names(df.1) <- c("ID", "name", "smoker")
+      df.1
+      
+    @
+    
+    We can access parts of a data frame
+    
+    <<data-frame-access>>=
+      df.1[2:4]  # columuns 2 - 4
+      
+      df.1[c("ID", "name")]  # columns by name
+      
+      df.1$ID  # variable ID (or column ID)
+    @
+    
+    \subsubsection*{Factors}
+    
+    Sometimes our variable is categorical (nominal). WE can tell R this by 
+    creating a factor.
+    
+    <<factors>>=
+      color <- c(rep("red", 21), rep("green", 14), rep("blue", 18))
+      head(color)
+      color.factor <- factor(color)
+      head(color.factor)
+      
+      # Summary will work on color.factor but not color
+      summary(color)
+      
+      summary(color.factor)
+    @
+    
+    
+  \subsection*{Functions}
+  Functions in R look like \textbf{\textit{mean()}}. You've already seen some 
+  of them being used. We use them like this.
+  
+  <<functions>>=
+      mean(1:10) # Gets the mean of the vector of values
+      
+      mean() # Will throw a "useful" error message
+      
+      mean # will show the source code or somethign similar
+  @
+  
+  \subsubsection*{Useful Functions}
+    \begin{description}
+      \item[getwd()] \hfill \\
+      Gets the current working directory.
+      \item[setwd()] \hfill \\
+      Sets teh current working directory.
+      \item[help()] \hfill \\
+      Gets help for something (eg help("mean"))
+      \item[data()] \hfill \\
+      Lists currently installed demo data sets.
+    \end{description}
+  
+  \subsection*{A Quick Analysis}
+  
+  Just as an example we can do a simple analysis. We are going to use the built in \textit{cars} dataset. First click the \textbf{\textit{broom}} icon in your \textbf{\textit{Environment}} tab. For a real analysis we would also be saving useful code to an R Script or similar document, but we'll skip that for now.
+  
+  First we'll load the data set and get to know the data a little.
+  
+  
+  <<cars-example1>>=
+    data("cars")  # load the data 
+      
+    # "Peak at the data to see what it looks like
+    head(cars)
+    
+    help(cars)  # Look at the help.
+  @
+  
+   We see that the \textit{cars} data set is just two columun, speed and distance. First lets get look at the data itself before we analyze it.
+  
+  <<cars-description>>=
+      summary(cars) # Simple descriptive statistics
+    
+  @
+  
+  <<cars-boxplot, fig.height=4>>=
+      # Boxplots are good to see the distribution
+      # and detecting outliers. This looks good.
+      boxplot(cars, notch=TRUE)  
+  @
+  
+  <<cars-histogram1>>=
+      
+      # We can also do histograms.
+      hist(cars$speed)
+  @
+  <<cars-histogram2>>=
+      hist(cars$dist)
+  @
+  
+  
+  \pagenumbering{arabic}
+
+
+\end{document}
